@@ -23,7 +23,7 @@ export const register = async (req, res) => {
     const myCloud = await cloudinary.v2.uploader.upload(avatar, {
       folder: "todo_App",
     });
-    fs.rmSync("./tmp", { recursive: true });
+    // fs.rmSync("./tmp", { recursive: true });
     user = await User.create({
       name,
       email,
