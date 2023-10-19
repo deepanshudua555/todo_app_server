@@ -1,15 +1,15 @@
 import { User } from "../models/users.js";
 import { sendMail } from "../utils/sendMail.js";
 import { sendToken } from "../utils/sendToken.js";
-import cloudinary from "cloudinary";
-import fs from "fs";
+// import cloudinary from "cloudinary";
+// import fs from "fs";
 
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const avatar = req.files.avatar.tempFilePath;
-    console.log(avatar);
+    // const avatar = req.files.avatar.tempFilePath;
+    // console.log(avatar);
 
     let user = await User.findOne({ email });
     if (user) {
@@ -20,18 +20,18 @@ export const register = async (req, res) => {
 
     // const otp = 123456;
     const otp = Math.floor(Math.random()*9999)+1000;
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-      folder: "todo_App",
-    });
+    // const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      // folder: "todo_App",
+    // });
     // fs.rmSync("./tmp", { recursive: true });
     user = await User.create({
       name,
       email,
       password,
-      avatar: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
+      // avatar: {
+      //   public_id: myCloud.public_id,
+      //   url: myCloud.secure_url,
+      // },
       otp,
       otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
     });
@@ -172,19 +172,19 @@ export const updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const { name } = req.body;
-    const avatar = req.files.avatar.tempFilePath;
+    // const avatar = req.files.avatar.tempFilePath;
     if (name) user.name = name;
-    if(avatar){
-      await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-        folder: "todo_App",
-      });
-      fs.rmSync("./tmp", { recursive: true });
-      user.avatar = {
-        public_id : myCloud.public_id,
-        url:myCloud.secure_url
-      }
-    }
+    // if(avatar){
+    //   await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+    //   const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+    //     folder: "todo_App",
+    //   });
+    //   fs.rmSync("./tmp", { recursive: true });
+    //   user.avatar = {
+    //     public_id : myCloud.public_id,
+    //     url:myCloud.secure_url
+    //   }
+    // }
 
     await user.save();
     res

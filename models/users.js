@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
 
-  avatar: {
-    public_id: String,
-    url: String,
-  },
+  // avatar: {
+  //   public_id: String,
+  //   url: String,
+  // },
 
   createdAt: {
     type: Date,
