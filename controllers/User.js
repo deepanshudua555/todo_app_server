@@ -6,7 +6,7 @@ import { sendToken } from "../utils/sendToken.js";
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password,avatar } = req.body;
 
     // const avatar = req.files.avatar.tempFilePath;
     // console.log(avatar);
@@ -32,6 +32,7 @@ export const register = async (req, res) => {
       //   public_id: myCloud.public_id,
       //   url: myCloud.secure_url,
       // },
+      avatar,
       otp,
       otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
     });
@@ -127,8 +128,8 @@ export const addTask = async (req, res) => {
 export const removeTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-
-    const user = await User.findById(req.user_id);
+    console.log(req.user_id)
+    const user = await User.findById(req.user._id);
     user.tasks = user.tasks.filter(
       (task) => task._id.toString() !== taskId.toString()
     );
@@ -144,7 +145,6 @@ export const removeTask = async (req, res) => {
 export const updateTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-
     const user = await User.findById(req.user._id);
     user.task = user.tasks.find(
       (task) => task._id.toString() === taskId.toString()
@@ -171,9 +171,10 @@ export const getMyProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    const { name } = req.body;
+    const { name,avatar } = req.body;
     // const avatar = req.files.avatar.tempFilePath;
     if (name) user.name = name;
+    if (avatar) user.avatar = avatar;
     // if(avatar){
     //   await cloudinary.v2.uploader.destroy(user.avatar.public_id);
     //   const myCloud = await cloudinary.v2.uploader.upload(avatar, {
@@ -185,6 +186,7 @@ export const updateProfile = async (req, res) => {
     //     url:myCloud.secure_url
     //   }
     // }
+
 
     await user.save();
     res
