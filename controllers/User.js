@@ -227,8 +227,8 @@ export const forgetPassword = async (req, res) => {
     if (!user) {
       return res.status(400).json({ success: false, message: "Invalid email" });
     }
-    const otp = Math.floor(Math.random()*9999)+1000;
-    // const otp = 123456;
+    // const otp = Math.floor(Math.random()*9999)+1000;
+    const otp = 123456;
     user.resetPasswordOtp = otp;
     user.resetPasswordOtpExpiry = Date.now() + 10 * 60 * 1000;
     await user.save();
